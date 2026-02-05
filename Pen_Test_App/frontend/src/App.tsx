@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import './index.css'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface Snippet {
   language: string;
@@ -23,6 +25,7 @@ interface SearchResult {
   categories: string[];
   platforms: string[];
   snippet_content: string;
+  summary?: string;
   rank: number;
 }
 
@@ -106,7 +109,7 @@ function App() {
                 <th className="p-4 border-b border-slate-700">Vector</th>
                 <th className="p-4 border-b border-slate-700">Security Domains</th>
                 <th className="p-4 border-b border-slate-700">OS</th>
-                <th className="p-4 border-b border-slate-700 w-1/3">Snippet / Desc</th>
+                <th className="p-4 border-b border-slate-700 w-1/3">Purpose</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700">
@@ -130,10 +133,9 @@ function App() {
                     {r.platforms.join(', ')}
                   </td>
                   <td className="p-4 text-sm text-slate-500">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: r.snippet_content || '' }}
-                      className="line-clamp-2"
-                    />
+                    <div className="line-clamp-2">
+                      {r.summary || r.description}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -143,77 +145,102 @@ function App() {
                 </tr>
               )}
             </tbody>
-          </table>
-        </div>
-      </div>
+          </table >
+        </div >
+      </div >
 
       {/* Detail Modal */}
-      {selectedId !== null && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 animate-fade-in" onClick={closeModal}>
-          <div
-            className="bg-slate-900 w-full max-w-4xl max-h-[90vh] rounded-xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col"
-            onClick={e => e.stopPropagation()}
-          >
-            {detailLoading || !detailData ? (
-              <div className="p-12 text-center text-slate-500">Loading details...</div>
-            ) : (
-              <>
-                <div className="p-6 border-b border-slate-800 bg-slate-950 flex justify-between items-start">
-                  <div>
-                    <h2 className="text-2xl font-bold text-blue-400">{detailData.title}</h2>
-                    <div className="flex gap-2 mt-2">
-                      {detailData.categories.map((c, i) => <span key={i} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">{c}</span>)}
-                      {detailData.platforms.map((p, i) => <span key={i} className="text-xs bg-indigo-900/50 px-2 py-1 rounded text-indigo-200">{p}</span>)}
-                    </div>
-                  </div>
-                  <button onClick={closeModal} className="text-slate-500 hover:text-white text-2xl">&times;</button>
-                </div>
-
-                <div className="p-8 overflow-y-auto space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-300 mb-2">Description</h3>
-                    <p className="text-slate-400 leading-relaxed whitespace-pre-wrap">{detailData.description}</p>
-                  </div>
-
-                  {detailData.snippets.length > 0 ? (
+      {
+        selectedId !== null && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 animate-fade-in" onClick={closeModal}>
+            <div
+              className="bg-slate-900 w-full max-w-4xl max-h-[90vh] rounded-xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col"
+              onClick={e => e.stopPropagation()}
+            >
+              {detailLoading || !detailData ? (
+                <div className="p-12 text-center text-slate-500">Loading details...</div>
+              ) : (
+                <>
+                  <div className="p-6 border-b border-slate-800 bg-slate-950 flex justify-between items-start">
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-300 mb-4">Code Snippets</h3>
-                      <div className="space-y-6">
-                        {detailData.snippets.map((snip, i) => (
-                          <div key={i} className="relative group">
-                            <div className="absolute top-0 right-0 p-2 text-xs text-slate-500 font-mono uppercase bg-slate-800 rounded-bl">{snip.language || 'text'}</div>
-                            <pre className="bg-black p-4 rounded-lg overflow-x-auto border border-slate-800 text-sm text-green-400 font-mono shadow-inner">
-                              <code>{snip.content}</code>
-                            </pre>
-                          </div>
-                        ))}
+                      <h2 className="text-2xl font-bold text-blue-400">{detailData.title}</h2>
+                      <div className="flex gap-2 mt-2">
+                        {detailData.categories.map((c, i) => <span key={i} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">{c}</span>)}
+                        {detailData.platforms.map((p, i) => <span key={i} className="text-xs bg-indigo-900/50 px-2 py-1 rounded text-indigo-200">{p}</span>)}
                       </div>
                     </div>
-                  ) : (
-                    <div className="p-8 text-center border-2 border-dashed border-slate-800 rounded-lg">
-                      <p className="text-slate-500 italic">No sub page included for this entry</p>
-                    </div>
-                  )}
+                    <button onClick={closeModal} className="text-slate-500 hover:text-white text-2xl">&times;</button>
+                  </div>
 
-                  {detailData.technologies.length > 0 && (
+                  <div className="p-8 overflow-y-auto space-y-6">
                     <div>
-                      <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Related Technologies</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {detailData.technologies.map((t, i) => (
-                          <span key={i} className="bg-slate-800 text-slate-300 px-3 py-1 rounded-full text-sm border border-slate-700">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
+                      <h3 className="text-lg font-semibold text-slate-300 mb-2">Description</h3>
+                      <p className="text-slate-400 leading-relaxed whitespace-pre-wrap">{detailData.description}</p>
                     </div>
-                  )}
-                </div>
-              </>
-            )}
+
+                    {detailData.snippets.length > 0 ? (
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-300 mb-4">Code Snippets</h3>
+                        <div className="space-y-6">
+                          {detailData.snippets.map((snip, i) => {
+                            const isTable = snip.content.trim().startsWith('|') && (snip.content.includes('---') || snip.content.includes(':---'));
+
+                            return (
+                              <div key={i} className="relative group">
+                                <div className="absolute top-0 right-0 p-2 text-xs text-slate-500 font-mono uppercase bg-slate-800 rounded-bl">{snip.language || 'text'}</div>
+                                {isTable ? (
+                                  <div className="bg-slate-900 p-4 rounded-lg overflow-x-auto border border-slate-800 text-sm shadow-inner">
+                                    <ReactMarkdown
+                                      remarkPlugins={[remarkGfm]}
+                                      components={{
+                                        table: (props: any) => <table className="border-collapse w-full text-left" {...props} />,
+                                        thead: (props: any) => <thead className="bg-slate-950 text-slate-300" {...props} />,
+                                        tbody: (props: any) => <tbody className="divide-y divide-slate-800" {...props} />,
+                                        tr: (props: any) => <tr className="hover:bg-slate-800/50" {...props} />,
+                                        th: (props: any) => <th className="p-3 font-semibold border-b border-slate-700 whitespace-nowrap" {...props} />,
+                                        td: (props: any) => <td className="p-3 text-slate-400 border-b border-slate-800/50 font-mono text-xs whitespace-pre-wrap" {...props} />,
+                                        code: (props: any) => <code className="bg-slate-800 px-1 py-0.5 rounded text-blue-300 font-mono" {...props} />
+                                      }}
+                                    >
+                                      {snip.content}
+                                    </ReactMarkdown>
+                                  </div>
+                                ) : (
+                                  <pre className="bg-black p-4 rounded-lg overflow-x-auto border border-slate-800 text-sm text-green-400 font-mono shadow-inner">
+                                    <code>{snip.content}</code>
+                                  </pre>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-8 text-center border-2 border-dashed border-slate-800 rounded-lg">
+                        <p className="text-slate-500 italic">No sub page included for this entry</p>
+                      </div>
+                    )}
+
+                    {detailData.technologies.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Related Technologies</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {detailData.technologies.map((t, i) => (
+                            <span key={i} className="bg-slate-800 text-slate-300 px-3 py-1 rounded-full text-sm border border-slate-700">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   )
 }
 

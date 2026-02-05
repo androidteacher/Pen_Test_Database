@@ -61,6 +61,7 @@ def search(q: str = "", limit: int = 100, db: sqlite3.Connection = Depends(get_d
             t.id, 
             t.title, 
             t.description,
+            t.summary,
             GROUP_CONCAT(DISTINCT c.name) as category_names,
             GROUP_CONCAT(DISTINCT p.name) as platform_names
         FROM techniques t
@@ -85,8 +86,9 @@ def search(q: str = "", limit: int = 100, db: sqlite3.Connection = Depends(get_d
         t_id = row[0]
         t_title = row[1]
         t_desc = row[2]
-        cats = row[3].split(',') if row[3] else []
-        plats = row[4].split(',') if row[4] else []
+        t_summary = row[3]
+        cats = row[4].split(',') if row[4] else []
+        plats = row[5].split(',') if row[5] else []
         
         # mix in FTS data if it exists
         snippet = None
@@ -102,6 +104,7 @@ def search(q: str = "", limit: int = 100, db: sqlite3.Connection = Depends(get_d
             id=t_id,
             title=t_title,
             description=t_desc or "",
+            summary=t_summary or "",
             categories=cats,
             platforms=plats,
             snippet_content=snippet,

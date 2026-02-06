@@ -7,3 +7,68 @@ body {
   color: #e2e8f0;
   /* Slate 200 */
 }
+
+/* Markdown Styles */
+.markdown-body h1 {
+  @apply text-3xl font-bold text-blue-400 mt-6 mb-4 border-b border-slate-700 pb-2;
+}
+
+.markdown-body h2 {
+  @apply text-2xl font-bold text-blue-300 mt-5 mb-3 border-b border-slate-800 pb-1;
+}
+
+.markdown-body h3 {
+  @apply text-xl font-semibold text-blue-200 mt-4 mb-2;
+}
+
+.markdown-body p {
+  @apply mb-4 leading-relaxed;
+}
+
+.markdown-body ul {
+  @apply list-disc list-outside ml-6 mb-4;
+}
+
+.markdown-body ol {
+  @apply list-decimal list-outside ml-6 mb-4;
+}
+
+.markdown-body li {
+  @apply mb-1;
+}
+
+.markdown-body pre {
+  @apply bg-slate-950 p-4 rounded-lg overflow-x-auto border border-slate-800 mb-4;
+}
+
+.markdown-body code {
+  @apply font-mono text-sm bg-slate-800 px-1 py-0.5 rounded text-blue-300;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-green-400 block;
+}
+
+.markdown-body blockquote {
+  @apply border-l-4 border-slate-600 pl-4 py-1 my-4 italic text-slate-400 bg-slate-800/30 rounded-r;
+}
+
+.markdown-body a {
+  @apply text-blue-400 hover:text-blue-300 underline underline-offset-2;
+}
+
+.markdown-body table {
+  @apply w-full border-collapse mb-4;
+}
+
+.markdown-body th {
+  @apply border border-slate-700 bg-slate-900 p-2 text-left font-semibold text-slate-300;
+}
+
+.markdown-body td {
+  @apply border border-slate-700 p-2 text-slate-400;
+}
+
+.markdown-body hr {
+  @apply border-slate-700 my-6;
+}

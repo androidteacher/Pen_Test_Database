@@ -12,6 +12,7 @@ dist/
 
 # Database (Generated)
 *.db
+!Pen_Test_App/backend/pen_test.db
 *.sqlite3
 
 # Docker

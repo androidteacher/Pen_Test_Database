@@ -1,24 +1,7 @@
 # Pen Test Database
 
-A comprehensive, searchable database of penetration testing techniques, powered by a modern web stack. This application allows security professionals to quickly find, categorize, and understand various exploitation vectors, command injections, and security bypass methods.
+A comprehensive, searchable database of penetration testing techniques. This application allows security professionals to quickly find, categorize, and understand various exploitation vectors, command injections, and security bypass methods.
 
-## Features
-
-- **Advanced Search**: Instant search with FTS (Full-Text Search) capabilities globally across titles and descriptions.
-- **Contextual Summaries**: Automatically inferred "Purpose" fields provide quick context for each technique (e.g., "Methods to circumvent security controls").
-- **Rich Details**: View detailed technique information including code snippets, platforms, and related technologies, computed and rendered with Markdown support.
-- **Categorization**: Filterable by Attack Vector, Security Domain, and Operating System.
-- **Modern UI**: Dark-themed, responsive interface built with React and TailwindCSS.
-
-## Tech Stack
-
-- **Frontend**: React, Vite, TypeScript, TailwindCSS
-- **Backend**: Python, FastAPI
-- **Database**: SQLite (with FTS5)
-- **Containerization**: Docker, Docker Compose
-- **Proxy**: Nginx
-
-## Getting Started
 
 ### Prerequisites
 

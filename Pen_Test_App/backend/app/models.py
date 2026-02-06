@@ -29,3 +29,15 @@ class SearchResult(BaseModel):
     platforms: List[str] = []
     snippet_content: Optional[str] = None
     rank: float
+
+class TechniqueCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    summary: Optional[str] = None
+    category_ids: List[int] = []
+    platform_ids: List[int] = []
+
+class MetaItem(BaseModel):
+    id: int
+    name: str
+
